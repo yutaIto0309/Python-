@@ -43,7 +43,7 @@ import matplotlib.pyplot as plt
 
 def plot_decision_regions(X, y, classifier, test_idx=None, resolution=0.02):
     # マーカーとカラーマップの準備
-    markers = ('s', 'x', '0', '^', 'v')
+    markers = ('s', 'x', 'o', '^', 'v')
     colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')
     cmap = ListedColormap(colors[:len(np.unique(y))])
     # 決定領域のプロット
@@ -68,4 +68,20 @@ def plot_decision_regions(X, y, classifier, test_idx=None, resolution=0.02):
         # 全てのデータ点をプロット
         X_test, y_test = X[test_idx,:], y[test_idx]    
         plt.scatter(X_test[:,0], X_test[:, 1], c='', edgecolors='black', alpha=1.0, linewidths=1, marker='o', s=100, label='test set')
+# %%
+# 訓練データとテストデータの特徴量を行方向に結合
+X_combined_std = np.vstack((X_train_std, X_test_std))
+# 訓練データとテストデータのクラスラベルを結合
+y_combined = np.hstack((y_train, y_test))
+# 決定境界のプロット
+plot_decision_regions(X=X_combined_std, y=y_combined, classifier=ppn, test_idx=range(105, 150))
+# 軸ラベルの設定
+plt.xlabel('petal length [standardized]')
+plt.ylabel('petal width [standardized]')
+# 凡例の設定(左上に配置)
+plt.legend(loc='upper left')
+# グラフの表示
+plt.tight_layout()
+plt.show()
+
 # %%
