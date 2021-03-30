@@ -1,4 +1,4 @@
-import numpy as np 
+import numpy
 import sys
 
 class NeuralNetMLP(object):
@@ -28,3 +28,18 @@ class NeuralNetMLP(object):
     eval_ : dict
         属性のエポックごとに、コスト、訓練の正解率、検証の正解率を収集するディクショナリ
     """
+
+    def __init__(self, n_hidden=30, l2=0., epochs=100, eta=0.001, shuffle=True, minibatch_size=1, seed=None):
+        """
+        初期化
+        """
+
+        self.random = numpy.random.RandomState(seed)
+        self.n_hidden = n_hidden
+        self.l2 = l2
+        self.epochs = epochs
+        self.eta = eta
+        self.shuffle = shuffle
+        self.minibatch_size = minibatch_size
+
+    
