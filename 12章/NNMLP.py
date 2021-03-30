@@ -41,8 +41,4 @@ class NeuralNetMLP(object):
         self.eta = eta
         self.shuffle = shuffle
         self.minibatch_size = minibatch_size
-
-        """
-        恵理ちゃんの料理はうまい
-        """
     
