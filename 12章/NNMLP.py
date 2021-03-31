@@ -158,5 +158,45 @@ class NeuralNetMLP(object):
         n_features = X_train.shape[1]
 
         # 重みの初期化
+        # 入力層 -> 隠れ層の重み
         self.b_h = numpy.zeros(self.n_hidden)
-        self.w_h = 
+        self.w_h = self.random.normal(loc=0.0, scale=0.1, size=(n_features, self.n_hidden))
+
+        # 隠れ層 -> 出力層の重み
+        self.b_out = numpy.zeros(n_output)
+        self.w_out = self.random.normal(loc=0.0, scale=0.1, size=(self.n_hidden, n_output))
+
+        # 書式設定
+        epoch_stlen = len(str(self.epochs))
+        self.eval_ = {
+            'cost' : [], 
+            'train_acc': [],
+            'valid_acc':[]
+            }
+
+        y_train_enc= self._onehot(y_train, n_output)
+
+        # エポック数だけ訓練を繰り返す
+        for i in range(self.epochs):
+            # ミニバッチの反復処理
+            indices = numpy.arange(X_train.shape[0])
+
+            if self.shuffle:
+                self.random.shuffle(indices)
+
+            for start_idx in range(0, indices.shape[0] - self.minibatch_size + 1, self.minibatch_size):
+                batch_idx = indices[start_idx:start_idx + self.minibatch_size]
+
+                # フォーワードプロバゲーション
+                z_h, a_h, z_out, a_out = self._forward(X_train[batch_idx])
+
+                # バックプロバゲーション
+                # [n_examples, n_classlabels]
+                delta_out = a_out - y_train_enc[batch_idx]
+
+                # [n_examples, n_hidden]
+                sigmoid_derivative_h = a_h * (1. - a_h)
+
+                # [n_examples, n_classlabels] dot [n_classlabels, n_hidden]
+                # -> [n_examples, n_hidden]
+                delta_h = (numpy.dot(delta_out, self.w_out.T) * sigmoid_derivative_h)
