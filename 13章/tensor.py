@@ -44,4 +44,6 @@ t5 = tf.linalg.matmul(t1, t2, transpose_b=True)
 print(t5.numpy())
 t6 = tf.linalg.matmul(t1, t2, transpose_a=True)
 print(t6.numpy())
+norm_t1 = tf.norm(t1, ord=2, axis=1).numpy()
+print(norm_t1)
 # %%
