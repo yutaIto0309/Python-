@@ -47,3 +47,43 @@ print(t6.numpy())
 norm_t1 = tf.norm(t1, ord=2, axis=1).numpy()
 print(norm_t1)
 # %%
+# テンソルの分割
+tf.random.set_seed(1)
+t = tf.random.uniform((6,))
+t_split = tf.split(t, num_or_size_splits=3)
+[item.numpy()for item in t_split]
+# 異なるサイズで分割
+tf.random.set_seed(1)
+t = tf.random.uniform((5,)) 
+t_split = tf.split(t, num_or_size_splits=[3,2])
+[item.numpy()for item in t_split]
+# テンソルの連結
+# ベクトル → ベクトル
+A = tf.ones((3,))
+B = tf.zeros((2,))
+C = tf.concat([A,B], axis=0)
+print(C.numpy())
+# ベクトル → 行列
+A = tf.ones((3,))
+B = tf.zeros((3,))
+S = tf.stack([A,B], axis=1)
+print(S.numpy())
+# %%
+# データセットの作成
+a = tf.random.uniform((6,))
+ds = tf.data.Dataset.from_tensor_slices(a)
+print(ds)
+[item.numpy() for item in ds]
+# バッチの作成
+ds_batch = ds.batch(3)
+for i, elem in enumerate(ds_batch, 1):
+    print('batch {}:'.format(i), elem.numpy())
+# %%
+# テンソル連結からのデータセットの作成
+tf.random.set_seed(1)
+t_x = tf.random.uniform([4,3], dtype=tf.float32)
+t_y = tf.range(4)
+ds_x = tf.data.Dataset.from_tensor_slices(t_x)
+ds_y = tf.data.Dataset.from_tensor_slices(t_y)
+ds_joint = tf.data.Dataset.zip((ds_x, ds_y))
+print(ds_joint)    
