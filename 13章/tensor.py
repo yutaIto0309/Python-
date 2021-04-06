@@ -86,4 +86,15 @@ t_y = tf.range(4)
 ds_x = tf.data.Dataset.from_tensor_slices(t_x)
 ds_y = tf.data.Dataset.from_tensor_slices(t_y)
 ds_joint = tf.data.Dataset.zip((ds_x, ds_y))
-print(ds_joint)    
+# for examples in ds_joint:
+#     print(' X:', examples[0].numpy(), ' Y:', examples[1].numpy())
+ds_joint = tf.data.Dataset.from_tensor_slices((t_x, t_y))
+for examples in ds_joint:
+    print(' X:', examples[0].numpy(), ' Y:', examples[1].numpy())
+# %%
+# 作成したデータセットのシャッフル
+ds = ds_joint.shuffle(buffer_size=len(t_x))
+for example in ds:
+    print(' X:', example[0].numpy(), ' Y:', example[1].numpy())
+
+# %%
