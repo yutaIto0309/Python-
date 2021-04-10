@@ -96,5 +96,18 @@ for examples in ds_joint:
 ds = ds_joint.shuffle(buffer_size=len(t_x))
 for example in ds:
     print(' X:', example[0].numpy(), ' Y:', example[1].numpy())
-
+# バッチの作成
+ds = ds_joint.batch(batch_size=3, drop_remainder=False)
+batch_x, batch_y = next(iter(ds))
+print('Batch-x:\n', batch_x.numpy())
+print('Batch-y: ', batch_y.numpy())
+# パッチ分割したデータセットのリピート
+ds = ds_joint.batch(3).repeat(count=2)
+for i, (batch_x, batch_y) in enumerate(ds):
+    print(i, batch_x.shape, batch_y.numpy())
+# リピートからのバッチの作成
+ds = ds_joint.repeat(count=2).batch(3)
+for i, (batch_x, batch_y) in enumerate(ds):
+    print(i, batch_x.shape, batch_y.numpy())
+    
 # %%
